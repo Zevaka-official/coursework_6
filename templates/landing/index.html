@@ -1,0 +1,79 @@
+{% extends 'shared/_base.html' %}
+
+{% block content %}
+  <section class="my-5">
+    <h2>Сервис почтовых рассылок</h2>
+    {% if not user.is_authenticated %}
+      <p class="my-2">
+        Чтобы воспользоваться всеми преимуществами платформы
+        <a class="link-light" href="{% url 'app_accounts:login' %}">войдите</a> или
+        <a class="link-light" href="{% url 'app_accounts:registration' %}">зарегистрируйтесь</a>
+      </p>
+    {% endif %}
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+      <div class="col">
+        <div class="card text-center h-100">
+          <div class="card-header">
+            Активно рассылок
+          </div>
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+            <strong style="font-size: 10rem">{{ active_mailing }}</strong>
+            <footer class="blockquote-footer">Каждый день мы доставляем актуальную информацию вашим подписчикам</footer>
+            </blockquote>
+
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-center h-100">
+          <div class="card-header">
+            Всего создано рассылок
+          </div>
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+            <strong style="font-size: 10rem">{{ total_mailing }}</strong>
+            <footer class="blockquote-footer">Создайте вашу рассылку, и расслабтесь с чашечкой хорошего кофе.<br>
+              А мы сделаем за вас вашу рутину</footer>
+            </blockquote>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'app_mailings:mailing_list' %}" class="btn btn-success btn-lg m-3">Начать пользоваться</a>
+    </div>
+
+  </section>
+
+
+
+
+  {% if popular_articles %}
+    <h5 class="mt-5 pt-2 {% if popular_products %}border-top{% endif %}">Популярные статьи</h5>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+      {% for article in popular_articles %}
+        <div class="col">
+          <div class="card mb-3 h-100" style="max-width: 540px;">
+            <div class="card-body">
+              <h6 class="card-title">{{ article.title }}</h6>
+              <p class="card-text">{{ article.content_text|truncatechars:100 }}</p>
+
+              <p class="card-text text-end">
+                <small class="text-body-secondary ">{{ article.create_date }}</small>
+              </p>
+              <a href="{% url 'app_blog:article_detail' article.slug %}" class="stretched-link"></a>
+            </div>
+
+            <div class="card-footer">
+              <small class="text-body-secondary">{{ article.view_count }} просмотров</small>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock %}

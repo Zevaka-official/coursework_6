@@ -1,0 +1,88 @@
+<div class="container-fluid">
+  <a class="navbar-brand text-uppercase" href="/">Owl <i class="bi bi-envelope-open-heart"></i> post</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+      class="navbar-toggler-icon"></span></button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      {% with url_name=request.resolver_match.namespace|add:":"|add:request.resolver_match.url_name %}
+        <li class="nav-item">
+          <a class="nav-link {% if url_name == 'index' %}active{% endif %}"
+             href="{% url 'index' %}">Главная</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if url_name == 'app_blog:articles' %}active{% endif %}"
+             href="{% url 'app_blog:articles' %}">Блог</a>
+        </li>
+
+        {% if perms.app_accounts.view_user or perms.app_accounts.can_block_users %}
+        	<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+               aria-expanded="false">Администрирование</a>
+            <ul class="dropdown-menu">
+              <li class="nav-item">
+                <a class="nav-link {% if url_name == 'app_accounts:users_list' %}active{% endif %}"
+                   href="{% url 'app_accounts:users_list' %}"><i class="bi bi-person-lines-fill mx-1"></i> Пользователи</a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+               aria-expanded="false">Управление рассылками</a>
+            <ul class="dropdown-menu">
+              <li class="nav-item">
+                <a class="nav-link {% if url_name == 'app_mailings:mailing_list' %}active{% endif %}"
+                   href="{% url 'app_mailings:mailing_list' %}"><i class="bi bi-send mx-1"></i> Рассылки</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {% if url_name == 'app_mailings:mail_message_list' %}active{% endif %}"
+                   href="{% url 'app_mailings:mail_message_list' %}"><i class="bi bi-envelope-plus mx-1"></i> Письма</a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+               aria-expanded="false">{{ user.short_str }}</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item {% if url_name == 'app_accounts:user_detail' %}disabled{% endif %}"
+                   href="{% url 'app_accounts:user_detail' %}"><i class="bi bi-person mx-1"></i> Профиль</a>
+              </li>
+              {% if user.is_staff %}
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank"
+                     rel="noopener noreferrer"><i class="bi bi-gear mx-1"></i> Django admin</a>
+                </li>
+              {% endif %}
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item link-danger link-opacity-75" href="{% url 'app_accounts:logout' %}">
+                  <i class="bi bi-box-arrow-in-left mx-1"></i> Выход</a>
+              </li>
+            </ul>
+          </li>
+        {% else %}
+          {% if url_name != 'app_accounts:login' %}
+            <li>
+              <a class="nav-link" href="{% url 'app_accounts:login' %}"><i class="bi bi-box-arrow-in-right mx-1"></i> Войти</a>
+            </li>
+          {% endif %}
+        {% endif %}
+
+      {% endwith %}
+    </ul>
+  </div>
+</div>

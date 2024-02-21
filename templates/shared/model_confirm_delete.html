@@ -1,0 +1,18 @@
+{% extends 'shared/_base.html' %}
+
+{% block title %}
+  {{ block.super }} - Удаление объекта
+{% endblock %}
+
+{% block content %}
+  <div class="position-relative w-100 vh-100">
+    <form method="post" class="position-absolute top-50 start-50 translate-middle ">
+      <p>Удалить <strong>{{ object }}</strong>?</p>
+      {% csrf_token %}
+      <div class="btn-group justify-content-center w-100" role="group">
+        <button class="btn btn-danger" type="submit">Удалить</button>
+        <a href="{{ object.get_absolute_url }}" class="btn btn-success nav-back">Отмена</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

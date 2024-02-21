@@ -1,0 +1,17 @@
+{% extends 'shared/_base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}
+  {{ block.super }} - {% if object %}Редактирование{% else %}Создание{% endif %} рассылки
+{% endblock %}
+
+{% block content %}
+  <form class="mt-5" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout="floating" %}
+
+    <button class="btn btn-success" type="submit">Сохранить</button>
+    <a class="btn btn-secondary"
+       href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'app_mailings:mailing_list' %}{% endif %}">Отмена</a>
+
+  </form>
+{% endblock %}

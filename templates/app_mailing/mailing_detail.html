@@ -1,0 +1,39 @@
+{% extends 'shared/_base.html' %}
+
+{% block title %}
+  {{ block.super }} - {{ object }}
+{% endblock %}
+
+{% block content %}
+  <div class="btn-toolbar my-4" role="toolbar">
+    <div class="btn-group btn-group-sm me-2" role="group">
+      <a class="btn btn-outline-primary" href="{% url 'app_mailings:mailing_list' %}">
+        <i class="bi bi-list"></i>
+        Список</a>
+      <a class="btn btn-outline-success" href="{% url 'app_mailings:mailing_create' %}">
+        <i class="bi bi-send-plus"></i>
+        Создать новую</a>
+    </div>
+    <div class="btn-group btn-group-sm me-2" role="group">
+      {% if user.pk == object.mailing_owner.pk or perms.app_mailing.change_mailing %}
+        <a class="btn btn-outline-success" href="{% url 'app_mailings:mailing_update' object.pk %}">
+          <i class="bi bi-pencil"></i>
+          Править</a>
+      {% endif %}
+      {% if perms.app_mailing.delete_mailing or user.pk == object.mailing_owner.pk %}
+        <a class="btn btn-outline-danger" href="{% url 'app_mailings:mailing_delete' object.pk %}">
+          <i class="bi bi-trash"></i>
+          Удалить</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <p>{{ object.mailing_owner }}</p>
+  <p>{{ object.message.subject }}</p>
+  <p>{{ object.message.text }}</p>
+  <ul>
+    {% for subscriber in object.subscribers.all %}
+      <li>{{ subscriber.email }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

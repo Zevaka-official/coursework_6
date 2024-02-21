@@ -1,0 +1,75 @@
+{% extends 'shared/_base.html' %}
+{% load static %}
+{% block content %}
+  {% if user.is_authenticated %}
+     <div class="btn-toolbar my-4" role="toolbar">
+      <div class="btn-group btn-group-sm me-2" role="group">
+        <a class="btn btn-outline-primary" href="{% url 'app_accounts:user_detail' %}">
+          <i class="bi bi-list"></i>
+          Мои статьи</a>
+        <a class="btn btn-outline-success" href="{% url 'app_blog:article_create' %}">
+          <i class="bi bi-file-earmark-plus"></i>
+          Создать новую</a>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+    {% for object in object_list %}
+      <div class="col">
+        <div class="card mb-3 h-100" style="max-width: 540px;">
+          {% if object.preview_image %}
+            <img src="{{ object.preview_image.url }}" class="card-img-top object-fit-cover w-100"
+                 alt="object.title">
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ object.title }}</h5>
+            <p class="card-text">{{ object.content_text|truncatechars:250 }}</p>
+
+            <p class="card-text text-end">
+              <small class="text-body-secondary ">{{ object.create_date }}</small>
+            </p>
+            <a href="{% url 'app_blog:article_detail' object.slug %}" class="stretched-link"></a>
+          </div>
+
+          <div class="card-footer">
+            <small class="text-body-secondary">{{ object.view_count }} просмотров</small>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <nav aria-label="Страницы с товарами" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item {% if page_obj.has_previous == False %}disabled{% endif %}">
+          <a
+              class="page-link"
+              href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}
+                            {% else %}#{% endif %}"
+              aria-label="Предыдущая">
+            <span aria-hidden="true">&laquo;</span></a>
+        </li>
+
+        {% for page_id in page_obj.paginator.page_range %}
+          {% if page_obj.number == page_id %}
+            <li class="page-item active" aria-current="page">
+              <span class="page-link">{{ page_id }}</span>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_id }}">{{ page_id }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        <li class="page-item {% if page_obj.has_next == False %}disabled{% endif %}">
+          <a class="page-link"
+             href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}"
+             aria-label="Следующая"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

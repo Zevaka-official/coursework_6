@@ -1,0 +1,51 @@
+{% extends 'shared/_base.html' %}
+{% block title %}
+  {{ block.super }} - Список пользователей
+{% endblock %}
+{% block content %}
+  <table class="table table-hover table-striped mt-5">
+    <thead>
+    <tr>
+      <th>ФИО</th>
+      <th>email</th>
+      <th>Активен</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.full_name }}</td>
+        <td>{{ object.email }}</td>
+        <td>
+          {% if object.is_active %}
+            <i class="bi bi-check text-success-emphasis "></i>
+          {% else %}
+            <i class="bi bi-x text-danger-emphasis "></i>
+          {% endif %}
+        </td>
+        <td>
+          <div class="btn-toolbar">
+            <div class="btn-group btn-group-sm" role="group">
+              {% if user.pk == object.pk %}
+                <a href="{% url 'app_accounts:user_detail' %}" class="btn btn-outline-primary"><i
+                    class="bi bi-pencil"></i></a>
+              {% endif %}
+              {% if perms.app_accounts.can_block_users and not user.pk == object.pk %}
+                <a href="{% url 'app_accounts:user_block' object.pk %}" class="btn btn-outline-warning">
+                  {% if object.is_active %}
+                    <i class="bi bi-person"></i>
+                  {% else %}
+                    <i class="bi bi-person-lock"></i>
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

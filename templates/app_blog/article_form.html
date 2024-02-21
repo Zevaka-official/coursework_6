@@ -1,0 +1,18 @@
+{% extends 'shared/_base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}
+  {{ block.super }} - {% if object %}Редактирование {{ object.title }}{% else %}Новая публикация{% endif %}
+{% endblock %}
+{% block content %}
+    <form class="mt-5" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form layout="floating" %}
+        <div class="mb-3 btn-group" role="group">
+            {% if object %}
+                <a href="{% url 'app_blog:article_detail' object.slug %}" class="btn btn-secondary nav-back">Отмена</a>
+            {% endif %}
+            <button class="btn btn-success" type="submit">Сохранить</button>
+        </div>
+
+    </form>
+{% endblock %}

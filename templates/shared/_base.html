@@ -1,0 +1,40 @@
+{% load static %}
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>
+    {% block title %}
+      Owl post
+    {% endblock %}
+  </title>
+  {% bootstrap_css %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet"/>
+  <link href="{% static 'css/bootstrap-icons.min.css' %}" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg acrylic-bg-dark border-bottom border-body sticky-top">
+  {% block page_navbar %}
+    {% include 'shared/_navbar.html' %}
+  {% endblock %}
+</nav>
+
+<section class="container ">
+  <section class="content d-flex flex-column min-vh-100">
+    {% block content %}
+    {% endblock %}
+  </section>
+  <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    {% block page_footer %}
+      {% include 'shared/_footer.html' %}
+    {% endblock %}
+  </footer>
+</section>
+
+{% bootstrap_javascript %}
+<script src="{% static 'js/app.script.js' %}"></script>
+</body>
+</html>

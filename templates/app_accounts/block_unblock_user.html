@@ -1,0 +1,20 @@
+{% extends 'shared/_base.html' %}
+
+{% block title %}
+	Управление блокировкой пользователя
+{% endblock %}
+
+{% block content %}
+	<div class="position-absolute top-50 start-50 translate-middle w-25">
+    <form method="post">
+      {% with WIDGET_ERROR_CLASS='is-invalid' %}
+        {% csrf_token %}
+        {% bootstrap_form form layout="floating" %}
+        <div class="hstack gap-3 my-4">
+          <a class="btn btn-secondary" href="{% url 'app_accounts:user_detail' %}">Отмена</a>
+          <button class="btn btn-success" type="submit">Сохранить</button>
+        </div>
+      {% endwith %}
+    </form>
+  </div>
+{% endblock %}
